@@ -268,10 +268,10 @@ void Johnson_Counter(void)
             {
                 break;
             }
-            led_msb = (led_pattern & 0x80 ) >> 0x07;
-            led_msb = led_msb ^ 0x01;
-            led_pattern = led_pattern << 0x01;
-            led_pattern = led_pattern | led_msb;
+            led_msb = (led_pattern & 0x80 ) >> 0x07; //Isolates the previous MSB and shifts to bit 0
+            led_msb = led_msb ^ 0x01; // Inverts previous MSB to produce Johnson feedback loop
+            led_pattern = led_pattern << 0x01; // shift MSB to the left
+            led_pattern = led_pattern | led_msb; // Inserts the inverted previous MSB into bit 0
         }
 }
 
