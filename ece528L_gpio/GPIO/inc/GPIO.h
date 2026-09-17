@@ -292,40 +292,78 @@ void PMOD_SWT_Init(void);
 uint8_t Get_PMOD_SWT_Status(void);
 
 /**
- * @brief The LED_Pattern_1 function sets the output of the user LEDs based on the status of the user buttons.
+ * @brief Controls the user LEDs and PMOD 8LD module based on the user buttons.
  *
- * This function sets the output of both the built-in red LED (P1.0) and the RGB LED (P2.0 - P2.2) based on
- * the status of the Button 1 (P1.1) and Button 2 (P1.4).
+ * When Buttons 1 and 2 are not pressed, LED1 and the RGB LED are off while
+ * all LEDs on the PMOD 8LD module are on. When Button 1 is pressed, LED1
+ * turns on and PMOD LEDs 0, 2, 4, and 6 are on. When Button 2 is pressed,
+ * LED1 is off, the RGB LED is blue, and PMOD LEDs 1, 3, 5, and 7 are on.
+ * When both buttons are pressed, LED1 and the green RGB LED toggle every
+ * second while all PMOD LEDs remain off.
  *
- * @param button_status An 8-bit unsigned integer that indicates the status of Button 1 and Button 2.
- *                      The two user LEDs are controlled based on the value of button_status.
- *
- *  button_status      LED 1 Color      RGB LED Color
- *  -------------      -----------      -------------
- *      0x00               Red              Red
- *      0x10               Red              Off
- *      0x02               Off              Green
- *      0x12               Off              Off
- *
+ * @param button_status An 8-bit unsigned integer containing the status of
+ *                      Buttons 1 and 2.
  *
  * @return None
  */
 void LED_Pattern_1(uint8_t button_status);
 
 /**
- * @brief The LED_Pattern_2 function controls the user LEDs and the eight LEDs on the PMOD 8LD module.
+ * @brief Generates an 8-bit binary up-counter pattern when only SWT1 is enabled.
  *
- * This function turns on LED1 with a red color, sets the RGB LED to display a red color,
- * and then initiates a binary counter pattern on the PMOD 8LD module. The counter starts from 0
- * and increments up to 255 (0xFF) with a delay of 100 ms between each count. The sequence stops if
- * a specific switch status is detected or if led_count has reached 0xFF.
- *
- *
- * @param None
+ * LED1 is on and the RGB LED is red. The PMOD 8LD module counts upward from
+ * 0 to 255, displaying each count for 100 milliseconds. The sequence stops
+ * when SWT1 is disabled or another switch is enabled.
  *
  * @return None
  */
 void LED_Pattern_2(void);
+
+/**
+ * @brief Generates an 8-bit binary down-counter pattern when only SWT2 is enabled.
+ *
+ * LED1 is on and the RGB LED is blue. The PMOD 8LD module counts downward
+ * from 255 to 0, displaying each count for 100 milliseconds. The sequence
+ * stops when SWT2 is disabled or another switch is enabled.
+ *
+ * @return None
+ */
+void LED_Pattern_3(void);
+
+/**
+ * @brief Generates a left-shifting ring-counter pattern when only SWT3 is enabled.
+ *
+ * LED1 and the RGB LED are off. The PMOD 8LD pattern starts with LED0 on and
+ * shifts left through LED7. Each pattern is displayed for 200 milliseconds.
+ * The sequence stops when SWT3 is disabled or another switch is enabled.
+ *
+ * @return None
+ */
+void LED_Pattern_4(void);
+
+/**
+ * @brief Generates a right-shifting ring-counter pattern when only SWT4 is enabled.
+ *
+ * LED1 and the RGB LED are off. The PMOD 8LD pattern starts with LED7 on and
+ * shifts right through LED0. Each pattern is displayed for 200 milliseconds.
+ * The sequence stops when SWT4 is disabled or another switch is enabled.
+ *
+ * @return None
+ */
+void LED_Pattern_5(void);
+
+/**
+ * @brief Generates an 8-bit Johnson counter using the first two PMOD switches.
+ *
+ * When SWT1 and SWT2 are enabled and all other switches are disabled, LED1 is
+ * on and the RGB LED is green. The PMOD 8LD pattern begins with all bits cleared,
+ * shifts left, and inserts the inverted previous MSB into bit 0. The counter has
+ * 16 states, each displayed for 200 milliseconds, and stops when the switch
+ * configuration changes.
+ *
+ * @return None
+ */
+void Johnson_Counter(void);
 
 /**
  * @brief The LED_Controller function selects and executes an appropriate LED pattern based on button and switch statuses.
